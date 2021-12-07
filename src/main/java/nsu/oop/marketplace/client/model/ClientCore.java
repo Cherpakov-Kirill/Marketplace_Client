@@ -34,7 +34,8 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
     @Override
     public void launchClientCore(int userId, MarketplaceProto.UserType userType) {
         System.out.println("Authentication success!");
-        launchChat(); //todo just for debug  In will be ///view.launchDBClient();
+        view.launchDBClient(userType);
+        //launchChat(); //todo just for debug  In will be ///view.launchDBClient();
     }
 
     private void launchChat() {
@@ -90,9 +91,9 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
 
     //View methods
     @Override
-    public void logIn(String name, String password) {
-        username = name;
-        users.sendJoinMessage(name, password);
+    public void logIn(String login, String password) {
+        username = login;
+        users.sendJoinMessage(login, password);
     }
 
     @Override

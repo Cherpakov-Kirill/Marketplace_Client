@@ -2,8 +2,8 @@ package nsu.oop.marketplace.client.view.windows.chat;
 
 import nsu.oop.marketplace.client.view.panels.chat.dialogue.DialogueListener;
 import nsu.oop.marketplace.client.view.panels.chat.dialogue.DialoguePanel;
-import nsu.oop.marketplace.client.view.panels.chat.menu.MenuListener;
-import nsu.oop.marketplace.client.view.panels.chat.menu.MenuPanel;
+import nsu.oop.marketplace.client.view.panels.chat.menu.ChatMenuListener;
+import nsu.oop.marketplace.client.view.panels.chat.menu.ChatMenuPanel;
 import nsu.oop.marketplace.client.view.panels.chat.users.UsersListener;
 import nsu.oop.marketplace.client.view.panels.chat.users.UsersPanel;
 
@@ -18,7 +18,7 @@ import java.util.Map;
 
 import static nsu.oop.marketplace.client.view.ViewUtils.getPart;
 
-public class ChatWindow extends JFrame implements DialogueListener, UsersListener, MenuListener {
+public class ChatWindow extends JFrame implements DialogueListener, UsersListener, ChatMenuListener {
     private static final String NAME = "Chat";
     private static final String MENU = "Menu";
     private static final String CLOSE = "Close";
@@ -27,7 +27,7 @@ public class ChatWindow extends JFrame implements DialogueListener, UsersListene
 
     private final Map<String, DialoguePanel> allDialoguePanels;
     private final UsersPanel usersPanel;
-    private final MenuPanel menuPanel;
+    private final ChatMenuPanel chatMenuPanel;
     private final ChatWindowListener listener;
 
     private final int widthChatWindow;
@@ -67,7 +67,7 @@ public class ChatWindow extends JFrame implements DialogueListener, UsersListene
         this.heightDialogue = size;
         this.setSize(widthChatWindow, heightChatWindow);
         setupMenu();
-        menuPanel = new MenuPanel(this, username, widthUsersOrMenu, heightUsersOrMenu);
+        chatMenuPanel = new ChatMenuPanel(this, username, widthUsersOrMenu, heightUsersOrMenu);
         usersPanel = new UsersPanel(this, username, widthUsersOrMenu, heightUsersOrMenu);
         allDialoguePanels = new HashMap<>();
 
@@ -82,6 +82,7 @@ public class ChatWindow extends JFrame implements DialogueListener, UsersListene
                 closeTheChat();
             }
         });
+        this.setResizable(false);
         this.setVisible(true);
     }
 
@@ -171,6 +172,6 @@ public class ChatWindow extends JFrame implements DialogueListener, UsersListene
 
     @Override
     public void openMenuBar() {
-        setContentOnFrame(getContentPanel(menuPanel, allDialoguePanels.get(chosenDialog)));
+        setContentOnFrame(getContentPanel(chatMenuPanel, allDialoguePanels.get(chosenDialog)));
     }
 }

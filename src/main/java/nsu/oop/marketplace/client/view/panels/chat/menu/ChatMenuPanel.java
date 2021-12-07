@@ -7,8 +7,8 @@ import java.awt.*;
 
 import static nsu.oop.marketplace.client.view.ViewUtils.getPart;
 
-public class MenuPanel extends WindowPanel {
-    public MenuPanel(MenuListener listener, String username, int width, int height) {
+public class ChatMenuPanel extends WindowPanel {
+    public ChatMenuPanel(ChatMenuListener listener, String username, int width, int height) {
         super("/chat/Menu.png", width, height);
         add(ViewUtils.initButton(getPart(width,0.1526), getPart(height,0.0533), getPart(width,0.027), getPart(height,0.0093), e -> listener.closeMenuBar()));
         add(ViewUtils.initButton(getPart(width,0.8015), getPart(height,0.0466), getPart(width,0.0763), getPart(height,0.24), e -> listener.closeTheChat()));

@@ -1,6 +1,6 @@
 package nsu.oop.marketplace.client.view.panels.chat.menu;
 
-public interface MenuListener {
+public interface ChatMenuListener {
     void closeTheChat();
 
     void closeMenuBar();

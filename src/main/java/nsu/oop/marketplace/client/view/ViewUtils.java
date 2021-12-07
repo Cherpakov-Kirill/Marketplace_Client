@@ -18,7 +18,7 @@ public class ViewUtils {
         button.setPreferredSize(new Dimension(width, height));
         button.setFocusPainted(false);
         button.setContentAreaFilled(false);
-        button.setBorderPainted(false);///
+        button.setBorderPainted(true);///
         button.setOpaque(false);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.addActionListener(listener);

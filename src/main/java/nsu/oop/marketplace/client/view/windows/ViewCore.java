@@ -7,6 +7,7 @@ import nsu.oop.marketplace.client.view.windows.chat.ChatWindow;
 import nsu.oop.marketplace.client.view.windows.chat.ChatWindowListener;
 import nsu.oop.marketplace.client.view.windows.db.DBWindow;
 import nsu.oop.marketplace.client.view.windows.db.DBWindowListener;
+import nsu.oop.marketplace.inet.MarketplaceProto;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +16,7 @@ import java.util.Properties;
 
 
 public class ViewCore implements View, DBWindowListener, ChatWindowListener, AuthenticationListener {
-    private ViewCoreListener listener;
+    private final ViewCoreListener listener;
     private Authentication authentication;
     private String username;
     private ChatWindow chatWindow;
@@ -58,9 +59,17 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
         }
     }
 
+    private int getWindowSizeForClient() {
+        if (appProps != null) {
+            return Integer.parseInt(appProps.getProperty("clientWindowSize"));
+        } else {
+            return 500;
+        }
+    }
+
     @Override
-    public void launchDBClient() {
-        this.dbWindow = new DBWindow(this);
+    public void launchDBClient(MarketplaceProto.UserType type) {
+        this.dbWindow = new DBWindow(this, getWindowSizeForClient(), username, type);
     }
 
     @Override
@@ -73,7 +82,9 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
 
     @Override
     public void logOut() {
-
+        if (chatWindow != null) chatWindow.closeTheChat();
+        if (dbWindow != null) dbWindow.closeTheClient();
+        this.authentication = new Authentication(this);
     }
 
     //Chat
@@ -94,9 +105,9 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
     }
 
     @Override
-    public void logIn(String name, String password) {
-        this.username = name;
-        listener.logIn(name, password);
+    public void logIn(String login, String password) {
+        this.username = login;
+        listener.logIn(login, password);
     }
 
     @Override
