@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class DBClientTest implements DBWindowListener {
 
     public DBClientTest(){
-        DBWindow window = new DBWindow(this,896,"Cherpakov Kirill", MarketplaceProto.UserType.DIRECTOR);
+        DBWindow window = new DBWindow(this,1280,"Cherpakov Kirill", MarketplaceProto.UserType.DIRECTOR);
     }
 
     @Override
