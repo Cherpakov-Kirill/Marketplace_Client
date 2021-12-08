@@ -8,7 +8,14 @@ public class DirectorMenuPanel extends ClientMenuPanel {
 
     public DirectorMenuPanel(ClientMenuListener listener, String username, int width, int height) {
         super("DirectorMenu", username, width, height);
-        add(ViewUtils.initButton(getPart(width,0.1526), getPart(height,0.0533), getPart(width,0.027), getPart(height,0.0093), e -> listener.showLogs()));
+        add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.259), e -> listener.showLogs()));
+        add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.334), e -> listener.showLogs()));
+        add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.409), e -> listener.showLogs()));
+        add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.484), e -> listener.showLogs()));
+        add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.559), e -> listener.showLogs()));
+        add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.634), e -> listener.showLogs()));
+        add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.709), e -> listener.showLogs()));
+        add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.784), e -> listener.showProductTable()));
         //add(ViewUtils.initButton(getPart(width,0.8015), getPart(height,0.0466), getPart(width,0.0763), getPart(height,0.24), e -> listener.closeTheChat()));
     }
 }

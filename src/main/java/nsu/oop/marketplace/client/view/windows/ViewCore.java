@@ -69,6 +69,7 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
 
     @Override
     public void launchDBClient(MarketplaceProto.UserType type) {
+        this.authentication.closeTheAuth();
         this.dbWindow = new DBWindow(this, getWindowSizeForClient(), username, type);
     }
 
@@ -90,7 +91,6 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
     //Chat
     @Override
     public void launchChat() {
-        this.authentication.closeTheAuth();
         this.chatWindow = new ChatWindow(this, getWindowSizeForChat(), username);
     }
 

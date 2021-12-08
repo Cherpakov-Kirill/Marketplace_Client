@@ -118,4 +118,14 @@ public class DBWindow extends JFrame implements ClientMenuListener {
     public void showLogs() {
         System.out.println("show logs");
     }
+
+    @Override
+    public void openChat() {
+        listener.launchChat();
+    }
+
+    @Override
+    public void showProductTable() {
+
+    }
 }

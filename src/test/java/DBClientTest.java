@@ -19,6 +19,11 @@ public class DBClientTest implements DBWindowListener {
 
     }
 
+    @Override
+    public void launchChat() {
+
+    }
+
 
     public static void main(String[] args) {
         DBClientTest dbTest = new DBClientTest();
