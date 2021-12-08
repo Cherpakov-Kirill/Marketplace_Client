@@ -13,6 +13,7 @@ import nsu.oop.marketplace.inet.users.UsersControllerListener;
 
 public class ClientCore implements InetControllerListener, UsersControllerListener, ViewCoreListener {
     private String username;
+
     private final Inet inet;
     private MarketplaceProto.SessionConfig config;
     private final Users users;
@@ -69,6 +70,17 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
     }
 
     @Override
+    public void receiveDBResponseMsg(MarketplaceProto.Message.DBResponse dbResponse, int id) {
+        switch (dbResponse.getTypeCase()) {
+            case PRODUCT_TABLE -> view.updateProductTable(dbResponse.getProductTable().getFullProductList());
+            case LOG_TABLE -> view.updateLogTable(dbResponse.getLogTable().getFullLogList());
+            case TASK_TABLE -> view.updateTaskTable(dbResponse.getTaskTable().getFullTaskList());
+            case SALE_TABLE -> view.updateSaleTable(dbResponse.getSaleTable().getFullSalesList());
+            case CHANGE_TABLE -> view.updateGlobalChangesTable(dbResponse.getChangeTable().getFullChangeList());
+        }
+    }
+
+    @Override
     public void notifyCoreAboutDisconnect(int id) {
         if (id == 0) {
             exit("The server is unavailable.");
@@ -76,7 +88,7 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
     }
 
     @Override
-    public void exit(String message){
+    public void exit(String message) {
         inet.interruptUnicast();
         view.closeView(message);
         System.exit(0);
@@ -101,7 +113,37 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
         }
     }
 
+    @Override
+    public void requestFullProductTable() {
+        users.sendDBRequestMessage(MessageBuilder.dbFullProductTableRequestMsgBuilder(), 0);
+    }
+
+    @Override
+    public void requestFullLogTable() {
+        users.sendDBRequestMessage(MessageBuilder.dbLogTableRequestMsgBuilder(), 0);
+    }
+
+    @Override
+    public void requestFullTaskTable() {
+        users.sendDBRequestMessage(MessageBuilder.dbTaskTableRequestMsgBuilder(), 0);
+    }
+
+    @Override
+    public void requestFullSalesTable() {
+        users.sendDBRequestMessage(MessageBuilder.dbSalesTableRequestMsgBuilder(), 0);
+    }
+
+    @Override
+    public void requestFullGlobalChangesTable() {
+        users.sendDBRequestMessage(MessageBuilder.dbGlobalChangesTableRequestMsgBuilder(), 0);
+    }
+
     //not used methods
+    @Override
+    public void receiveDBRequestMsg(MarketplaceProto.Message.DBRequest dbRequest, int i) {
+
+    }
+
     @Override
     public int receiveJoinMsg(String s, String s1, String s2, int i) {
         return 0;

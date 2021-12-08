@@ -14,7 +14,7 @@ dependencies {
     implementation 'com.google.protobuf:protobuf-java:3.14.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-    implementation 'nsu.oop.marketplace.inet:Marketplace_Inet:2.0-MARKETPLACEINET'
+    implementation 'nsu.oop.marketplace.inet:Marketplace_Inet:2.2-MARKETPLACEINET'
 }
 
 test {

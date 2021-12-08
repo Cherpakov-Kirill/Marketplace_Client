@@ -50,6 +50,11 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
         InformationWindow infoWindow = new InformationWindow(closeInfo);
     }
 
+    @Override
+    public void closeClientSession(String closeInfo) {
+        listener.exit(closeInfo);
+    }
+
     private int getWindowSizeForChat() {
         if (appProps != null) {
             return Integer.parseInt(appProps.getProperty("chatWindowSize"));
@@ -74,11 +79,6 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
     }
 
     @Override
-    public void endClientSession(String closeInfo) {
-        listener.exit(closeInfo);
-    }
-
-    @Override
     public void logOut() {
         if (chatWindow != null) chatWindow.closeTheChat();
         if (dbWindow != null) dbWindow.closeTheClient();
@@ -88,6 +88,31 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
     @Override
     public void openChat() {
         listener.launchChat();
+    }
+
+    @Override
+    public void requestFullProductTable() {
+        listener.requestFullProductTable();
+    }
+
+    @Override
+    public void requestFullLogTable() {
+        listener.requestFullLogTable();
+    }
+
+    @Override
+    public void requestFullTaskTable() {
+        listener.requestFullTaskTable();
+    }
+
+    @Override
+    public void requestFullSalesTable() {
+        listener.requestFullSalesTable();
+    }
+
+    @Override
+    public void requestFullGlobalChangesTable() {
+        listener.requestFullGlobalChangesTable();
     }
 
     //Chat
@@ -104,6 +129,31 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
     @Override
     public void updateUserList(List<String> list) {
         chatWindow.updateUserList(list);
+    }
+
+    @Override
+    public void updateProductTable(List<MarketplaceProto.DBFullProduct> products) {
+        dbWindow.updateProductTable(products);
+    }
+
+    @Override
+    public void updateLogTable(List<MarketplaceProto.DBFullLog> logs) {
+        dbWindow.updateLogTable(logs);
+    }
+
+    @Override
+    public void updateTaskTable(List<MarketplaceProto.DBFullTask> tasks) {
+        dbWindow.updateTaskTable(tasks);
+    }
+
+    @Override
+    public void updateSaleTable(List<MarketplaceProto.DBFullSales> sales) {
+        dbWindow.updateSaleTable(sales);
+    }
+
+    @Override
+    public void updateGlobalChangesTable(List<MarketplaceProto.DBFullChanges> fullChangeList) {
+        dbWindow.updateGlobalChangesTable(fullChangeList);
     }
 
     @Override

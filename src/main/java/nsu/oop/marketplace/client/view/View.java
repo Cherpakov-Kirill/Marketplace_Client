@@ -9,6 +9,13 @@ public interface View {
     void launchChat();
     void launchDBClient(MarketplaceProto.UserType type, String firstName, String secondName);
     void closeView(String closeInfo);
+
     void updateChatField(String chatName, String senderName, String message);
     void updateUserList(List<String> list);
+
+    void updateProductTable(List<MarketplaceProto.DBFullProduct> products);
+    void updateLogTable(List<MarketplaceProto.DBFullLog> logs);
+    void updateTaskTable(List<MarketplaceProto.DBFullTask> tasks);
+    void updateSaleTable(List<MarketplaceProto.DBFullSales> sales);
+    void updateGlobalChangesTable(List<MarketplaceProto.DBFullChanges> fullChangeList);
 }
