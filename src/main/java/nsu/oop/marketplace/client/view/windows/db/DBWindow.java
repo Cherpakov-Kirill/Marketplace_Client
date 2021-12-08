@@ -29,8 +29,8 @@ public class DBWindow extends JFrame implements ClientMenuListener {
     private final int widthMainPanel;
     private final int heightMainPanel;
 
-    private DBWindowListener listener;
-    private StartUpPanel startUpPanel;
+    private final DBWindowListener listener;
+    private final StartUpPanel startUpPanel;
     private ClientMenuPanel clientMenuPanel;
 
     private JMenuItem createMenuItem(String name, ActionListener listener) {
@@ -43,7 +43,7 @@ public class DBWindow extends JFrame implements ClientMenuListener {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu(MENU);
         menu.add(createMenuItem(LOGOUT, e -> listener.logOut()));
-        menu.add(createMenuItem(CLOSE, e -> closeTheClient()));
+        menu.add(createMenuItem(CLOSE, e -> listener.endClientSession("Client was closed, bye!")));
         menuBar.add(menu);
         this.setJMenuBar(menuBar);
     }
@@ -82,7 +82,7 @@ public class DBWindow extends JFrame implements ClientMenuListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                closeTheClient();
+                listener.endClientSession("Client was closed, bye!");
             }
         });
         this.setResizable(false);
@@ -107,7 +107,6 @@ public class DBWindow extends JFrame implements ClientMenuListener {
     public void closeTheClient() {
         this.setVisible(false);
         dispose();
-        listener.endClientSession();
     }
 
     public void logOut() {
@@ -121,7 +120,7 @@ public class DBWindow extends JFrame implements ClientMenuListener {
 
     @Override
     public void openChat() {
-        listener.launchChat();
+        listener.openChat();
     }
 
     @Override

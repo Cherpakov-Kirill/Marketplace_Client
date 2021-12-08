@@ -32,19 +32,18 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
     }
 
     @Override
-    public void launchClientCore(int userId, MarketplaceProto.UserType userType) {
-        System.out.println("Authentication success!");
-        view.launchDBClient(userType);
-        //launchChat(); //todo just for debug  In will be ///view.launchDBClient();
+    public void receiveUserInfoMsg(int i, MarketplaceProto.UserType userType, String firstName, String secondName) {
+        view.launchDBClient(userType, firstName, secondName);
     }
 
-    private void launchChat() {
+    @Override
+    public void launchChat() {
+        view.launchChat();
         users.sendChatMessage(
                 MarketplaceProto.Message.ChatMessage.newBuilder()
                         .setJoin(MarketplaceProto.Message.ChatMessage.JoinMsg.newBuilder().setName(username)
                                 .build())
                         .build(), 0);
-        view.launchChat();
     }
 
     @Override
@@ -54,7 +53,7 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
 
     @Override
     public void receiveAnnouncementMsg(MarketplaceProto.Message.AnnouncementMsg announcementMsg, String ip, int port) {
-        users.addUser(0, "Server", ip, port, MarketplaceProto.UserType.UNAUTHENTICATED);
+        users.addUser(0, "ServerUser", ip, port, MarketplaceProto.UserType.UNAUTHENTICATED, "Server", "System");
         inet.startUnicast();
         this.view = new ViewCore(this); //start UI and get login password
     }
@@ -62,31 +61,25 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
     @Override
     public void receiveChatMsg(MarketplaceProto.Message.ChatMessage chatMessage, int id) {
         switch (chatMessage.getTypeCase()) {
-            case JOIN -> {
-                users.sendChatMessage(MessageBuilder.chatErrorMsgBuilder("Server can not send Join message!"), id);
-            }
-            case END -> {
-                users.sendChatMessage(MessageBuilder.chatErrorMsgBuilder("Server can not send End message!"), id);
-            }
-            case PUBLIC -> {
-                view.updateChatField("Group Chat", chatMessage.getPublic().getSenderName(), chatMessage.getPublic().getMessage());
-            }
-            case PRIVATE -> {
-                view.updateChatField(chatMessage.getPrivate().getSenderName(), chatMessage.getPrivate().getSenderName(), chatMessage.getPrivate().getMessage());
-            }
-            case LIST -> {
-                view.updateUserList(chatMessage.getList().getUserList().getNameList());
-            }
+            case PUBLIC -> view.updateChatField("Group Chat", chatMessage.getPublic().getSenderName(), chatMessage.getPublic().getMessage());
+            case PRIVATE -> view.updateChatField(chatMessage.getPrivate().getSenderName(), chatMessage.getPrivate().getSenderName(), chatMessage.getPrivate().getMessage());
+            case LIST -> view.updateUserList(chatMessage.getList().getUserList().getNameList());
+            default -> users.sendChatMessage(MessageBuilder.chatErrorMsgBuilder("Server can not send " + chatMessage.getTypeCase() + " message!"), id);
         }
     }
 
     @Override
     public void notifyCoreAboutDisconnect(int id) {
         if (id == 0) {
-            view.closeView("The server is unavailable.");
-            inet.interruptUnicast();
-            System.exit(0);
+            exit("The server is unavailable.");
         }
+    }
+
+    @Override
+    public void exit(String message){
+        inet.interruptUnicast();
+        view.closeView(message);
+        System.exit(0);
     }
 
     //View methods
@@ -99,24 +92,13 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
     @Override
     public void sendChatMessage(String newMessage, String receiverName, String senderName) {
         switch (receiverName) {
-            case "Group Chat" -> {
-                users.sendChatMessage(
-                        MessageBuilder.chatPublicMsgBuilder(senderName, newMessage), 0);
-            }
-            case "End the session" -> {
-                users.sendChatMessage(
-                        MessageBuilder.chatEndMsgBuilder(senderName), 0);
-            }
-            default -> {
-                users.sendChatMessage(
-                        MessageBuilder.chatPrivateMsgBuilder(senderName, receiverName, newMessage), 0);
-            }
+            case "Group Chat" -> users.sendChatMessage(
+                    MessageBuilder.chatPublicMsgBuilder(senderName, newMessage), 0);
+            case "End the session" -> users.sendChatMessage(
+                    MessageBuilder.chatEndMsgBuilder(senderName), 0);
+            default -> users.sendChatMessage(
+                    MessageBuilder.chatPrivateMsgBuilder(senderName, receiverName, newMessage), 0);
         }
-    }
-
-    @Override
-    public void endTheClientSession(String message) {
-
     }
 
     //not used methods

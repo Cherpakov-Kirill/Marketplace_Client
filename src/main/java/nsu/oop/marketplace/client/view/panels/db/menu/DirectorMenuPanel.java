@@ -11,7 +11,7 @@ public class DirectorMenuPanel extends ClientMenuPanel {
         add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.259), e -> listener.showLogs()));
         add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.334), e -> listener.showLogs()));
         add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.409), e -> listener.showLogs()));
-        add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.484), e -> listener.showLogs()));
+        add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.484), e -> listener.openChat()));
         add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.559), e -> listener.showLogs()));
         add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.634), e -> listener.showLogs()));
         add(ViewUtils.initButton(getPart(width,0.9), getPart(height,0.06), getPart(width,0.027), getPart(height,0.709), e -> listener.showLogs()));

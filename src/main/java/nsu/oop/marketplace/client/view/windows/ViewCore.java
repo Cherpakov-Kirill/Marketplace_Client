@@ -21,7 +21,6 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
     private String username;
     private ChatWindow chatWindow;
     private DBWindow dbWindow;
-    private InformationWindow infoWindow;
     private Properties appProps;
 
 
@@ -48,7 +47,7 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
         if (chatWindow != null) chatWindow.closeTheChat();
         if (dbWindow != null) dbWindow.closeTheClient();
         if (authentication != null) authentication.closeTheAuth();
-        infoWindow = new InformationWindow(closeInfo);
+        InformationWindow infoWindow = new InformationWindow(closeInfo);
     }
 
     private int getWindowSizeForChat() {
@@ -68,17 +67,15 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
     }
 
     @Override
-    public void launchDBClient(MarketplaceProto.UserType type) {
+    public void launchDBClient(MarketplaceProto.UserType type, String firstName, String secondName) {
         this.authentication.closeTheAuth();
-        this.dbWindow = new DBWindow(this, getWindowSizeForClient(), username, type);
+        this.authentication = null;
+        this.dbWindow = new DBWindow(this, getWindowSizeForClient(), firstName + " " + secondName, type);
     }
 
     @Override
-    public void endClientSession() {
-        chatWindow.closeTheChat();
-        infoWindow = new InformationWindow("Client was closed, bye!");
-        System.out.println("endClientSession");
-        listener.endTheClientSession("Client was closed, bye!");
+    public void endClientSession(String closeInfo) {
+        listener.exit(closeInfo);
     }
 
     @Override
@@ -86,6 +83,11 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
         if (chatWindow != null) chatWindow.closeTheChat();
         if (dbWindow != null) dbWindow.closeTheClient();
         this.authentication = new Authentication(this);
+    }
+
+    @Override
+    public void openChat() {
+        listener.launchChat();
     }
 
     //Chat
@@ -113,10 +115,5 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
     @Override
     public void sendNewMessage(String newMessage, String receiverName, String senderName) {
         listener.sendChatMessage(newMessage, receiverName, senderName);
-    }
-
-    @Override
-    public void endChatSession() {
-        System.out.println("endChatSession");
     }
 }

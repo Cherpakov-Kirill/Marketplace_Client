@@ -6,29 +6,26 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class Authentication extends JFrame {
-    private JLabel windowName, user, pass, badAuth;
-    private JTextField nameField;
-    private JButton button;
-    private JPasswordField passField;
-    private AuthenticationListener listener;
+    private final JLabel badAuth;
+    private final JTextField nameField;
+    private final JPasswordField passField;
 
     public Authentication(AuthenticationListener listener) {
         super("Authentication Form");
-        this.listener = listener;
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(450, 260);
-        windowName = new JLabel("Authentication Form");
+        JLabel windowName = new JLabel("Authentication Form");
         windowName.setForeground(Color.blue);
         windowName.setFont(new Font("Roboto", Font.BOLD, 20));
-        user = new JLabel("Username");
-        pass = new JLabel("Password");
+        JLabel user = new JLabel("Username");
+        JLabel pass = new JLabel("Password");
         badAuth = new JLabel("Wrong login or password");
         badAuth.setForeground(Color.RED);
 
-        nameField = new JTextField("Kirill");
-        passField = new JPasswordField("0000");
-        button = new JButton("LogIn");
+        nameField = new JTextField("Dementor");
+        passField = new JPasswordField("qwerty123");
+        JButton button = new JButton("LogIn");
         button.addActionListener(e -> {
             remove(badAuth);
             repaint();
@@ -54,7 +51,7 @@ public class Authentication extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                closeTheChat();
+                listener.endClientSession("Client was closed, bye!");
             }
         });
     }
@@ -67,10 +64,5 @@ public class Authentication extends JFrame {
     public void closeTheAuth() {
         this.setVisible(false);
         dispose();
-    }
-
-    public void closeTheChat() {
-        closeTheAuth();
-        listener.endChatSession();
     }
 }

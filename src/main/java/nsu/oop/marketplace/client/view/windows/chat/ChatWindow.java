@@ -58,13 +58,12 @@ public class ChatWindow extends JFrame implements DialogueListener, UsersListene
         super(NAME);
         this.listener = listener;
         this.username = username;
-        int size = windowSize;
-        this.widthChatWindow = size;
+        this.widthChatWindow = windowSize;
         this.heightChatWindow = widthChatWindow + 58;
         this.widthUsersOrMenu = getPart(widthChatWindow, 0.349);
-        this.heightUsersOrMenu = size;
+        this.heightUsersOrMenu = windowSize;
         this.widthDialogue = getPart(widthChatWindow, 0.6509);
-        this.heightDialogue = size;
+        this.heightDialogue = windowSize;
         this.setSize(widthChatWindow, heightChatWindow);
         setupMenu();
         chatMenuPanel = new ChatMenuPanel(this, username, widthUsersOrMenu, heightUsersOrMenu);
@@ -153,7 +152,6 @@ public class ChatWindow extends JFrame implements DialogueListener, UsersListene
         this.setVisible(false);
         dispose();
         listener.sendNewMessage("","End the session", username);
-        listener.endChatSession();
     }
 
     ///ChatPanel
