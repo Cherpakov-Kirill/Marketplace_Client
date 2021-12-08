@@ -4,4 +4,7 @@ public interface ClientMenuListener {
     void showLogs();
     void openChat();
     void showProductTable();
+    void showTasks();
+    void showSales();
+    void showGlobalChanges();
 }

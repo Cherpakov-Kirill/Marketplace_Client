@@ -51,7 +51,7 @@ public class Authentication extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                listener.endClientSession("Client was closed, bye!");
+                listener.closeClientSession("Client was closed, bye!");
             }
         });
     }
