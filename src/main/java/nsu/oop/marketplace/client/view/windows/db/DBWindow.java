@@ -6,7 +6,6 @@ import nsu.oop.marketplace.client.view.panels.db.main.logs.LogTablePanel;
 import nsu.oop.marketplace.client.view.panels.db.main.product.ProductTablePanel;
 import nsu.oop.marketplace.client.view.panels.db.main.StartUpPanel;
 import nsu.oop.marketplace.client.view.panels.db.main.sales.SalesTablePanel;
-import nsu.oop.marketplace.client.view.panels.db.main.tasks.TaskLine;
 import nsu.oop.marketplace.client.view.panels.db.main.tasks.TaskLineListener;
 import nsu.oop.marketplace.client.view.panels.db.main.tasks.TaskTablePanel;
 import nsu.oop.marketplace.client.view.panels.db.menu.ClientMenuListener;
@@ -152,9 +151,16 @@ public class DBWindow extends JFrame implements ClientMenuListener, TaskLineList
         setContentOnFrame(getContentPanel(clientMenuPanel, globalChangeTablePanel));
     }
 
+    public void updateAcceptChange(MarketplaceProto.Message.DBResponse.AcceptChange acceptChange) {
+        if(acceptChange.getSuccess()){
+            globalChangeTablePanel.updateAcceptChange(acceptChange.getId());
+        }
+    }
+
     @Override
     public void acceptTheChange(int id) {
         System.out.println("Accept " + id);
+        listener.requestAcceptTheChange(id);
     }
 
     /// Sales table
@@ -181,9 +187,16 @@ public class DBWindow extends JFrame implements ClientMenuListener, TaskLineList
         setContentOnFrame(getContentPanel(clientMenuPanel, taskTablePanel));
     }
 
+    public void updateCompleteTask(MarketplaceProto.Message.DBResponse.CompleteTask completeTask) {
+        if(completeTask.getSuccess()){
+            taskTablePanel.updateCompleteTask(completeTask.getId());
+        }
+    }
+
     @Override
     public void completeTheTask(int id) {
         System.out.println("Complete " + id);
+        listener.requestCompleteTheTask(id);
     }
 
     /// Product table

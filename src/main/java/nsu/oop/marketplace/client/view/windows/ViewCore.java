@@ -115,6 +115,16 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
         listener.requestFullGlobalChangesTable();
     }
 
+    @Override
+    public void requestAcceptTheChange(int id) {
+        listener.requestAcceptTheChange(id);
+    }
+
+    @Override
+    public void requestCompleteTheTask(int id) {
+        listener.requestCompleteTheTask(id);
+    }
+
     //Chat
     @Override
     public void launchChat() {
@@ -154,6 +164,16 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
     @Override
     public void updateGlobalChangesTable(List<MarketplaceProto.DBFullChanges> fullChangeList) {
         dbWindow.updateGlobalChangesTable(fullChangeList);
+    }
+
+    @Override
+    public void updateCompleteTask(MarketplaceProto.Message.DBResponse.CompleteTask completeTask) {
+        dbWindow.updateCompleteTask(completeTask);
+    }
+
+    @Override
+    public void updateAcceptChange(MarketplaceProto.Message.DBResponse.AcceptChange acceptChange) {
+        dbWindow.updateAcceptChange(acceptChange);
     }
 
     @Override

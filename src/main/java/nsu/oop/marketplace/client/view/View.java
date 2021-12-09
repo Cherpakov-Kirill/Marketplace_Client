@@ -18,4 +18,8 @@ public interface View {
     void updateTaskTable(List<MarketplaceProto.DBFullTask> tasks);
     void updateSaleTable(List<MarketplaceProto.DBFullSales> sales);
     void updateGlobalChangesTable(List<MarketplaceProto.DBFullChanges> fullChangeList);
+
+    void updateCompleteTask(MarketplaceProto.Message.DBResponse.CompleteTask completeTask);
+
+    void updateAcceptChange(MarketplaceProto.Message.DBResponse.AcceptChange acceptChange);
 }

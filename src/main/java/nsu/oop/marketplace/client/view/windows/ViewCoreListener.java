@@ -10,4 +10,7 @@ public interface ViewCoreListener {
     void requestFullTaskTable();
     void requestFullSalesTable();
     void requestFullGlobalChangesTable();
+
+    void requestAcceptTheChange(int id);
+    void requestCompleteTheTask(int id);
 }

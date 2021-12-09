@@ -77,6 +77,8 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
             case TASK_TABLE -> view.updateTaskTable(dbResponse.getTaskTable().getFullTaskList());
             case SALE_TABLE -> view.updateSaleTable(dbResponse.getSaleTable().getFullSalesList());
             case CHANGE_TABLE -> view.updateGlobalChangesTable(dbResponse.getChangeTable().getFullChangeList());
+            case COMPLETE_TASK -> view.updateCompleteTask(dbResponse.getCompleteTask());
+            case ACCEPT_CHANGE -> view.updateAcceptChange(dbResponse.getAcceptChange());
         }
     }
 
@@ -120,22 +122,32 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
 
     @Override
     public void requestFullLogTable() {
-        users.sendDBRequestMessage(MessageBuilder.dbLogTableRequestMsgBuilder(), 0);
+        users.sendDBRequestMessage(MessageBuilder.dbFullLogTableRequestMsgBuilder(), 0);
     }
 
     @Override
     public void requestFullTaskTable() {
-        users.sendDBRequestMessage(MessageBuilder.dbTaskTableRequestMsgBuilder(), 0);
+        users.sendDBRequestMessage(MessageBuilder.dbFullTaskTableRequestMsgBuilder(), 0);
     }
 
     @Override
     public void requestFullSalesTable() {
-        users.sendDBRequestMessage(MessageBuilder.dbSalesTableRequestMsgBuilder(), 0);
+        users.sendDBRequestMessage(MessageBuilder.dbFullSalesTableRequestMsgBuilder(), 0);
     }
 
     @Override
     public void requestFullGlobalChangesTable() {
-        users.sendDBRequestMessage(MessageBuilder.dbGlobalChangesTableRequestMsgBuilder(), 0);
+        users.sendDBRequestMessage(MessageBuilder.dbFullGlobalChangesTableRequestMsgBuilder(), 0);
+    }
+
+    @Override
+    public void requestAcceptTheChange(int id) {
+        users.sendDBRequestMessage(MessageBuilder.dbAcceptChangeRequestMsgBuilder(id), 0);
+    }
+
+    @Override
+    public void requestCompleteTheTask(int id) {
+        users.sendDBRequestMessage(MessageBuilder.dbCompleteTaskRequestMsgBuilder(id), 0);
     }
 
     //not used methods

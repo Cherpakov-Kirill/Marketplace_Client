@@ -2,11 +2,14 @@ package nsu.oop.marketplace.client.view.panels.db.main.tasks;
 
 import nsu.oop.marketplace.client.view.ViewUtils;
 import nsu.oop.marketplace.client.view.panels.WindowPanel;
+import nsu.oop.marketplace.client.view.panels.db.main.globalChanges.GlobalChangeLine;
 import nsu.oop.marketplace.inet.MarketplaceProto;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static nsu.oop.marketplace.client.view.ViewUtils.getPart;
 
@@ -16,10 +19,12 @@ public class TaskTablePanel extends WindowPanel {
     private final int heightProductPanel;
     private final JScrollPane scrollPane;
     private final TaskLineListener listener;
+    private final Map<Integer, TaskLine> linesMap;
 
     public TaskTablePanel(TaskLineListener listener, int width, int height, int posX, int posY) {
         super("/client/taskTable/TaskTablePanel.png", width, height);
         this.listener = listener;
+        this.linesMap = new HashMap<>();
         setBounds(posX, posY, width, height);
 
         this.widthProductPanel = getPart(width, 0.8);
@@ -36,11 +41,20 @@ public class TaskTablePanel extends WindowPanel {
         taskTable.add(new TaskTableTitle(widthProductPanel, heightProductPanel));
         int i = 1;
         for (MarketplaceProto.DBFullTask task : tasks) {
-            taskTable.add(new TaskLine(listener, widthProductPanel, heightProductPanel, 0, i * heightProductPanel, task));
+            TaskLine line = new TaskLine(listener, widthProductPanel, heightProductPanel, 0, i * heightProductPanel, task);
+            linesMap.put(task.getId(), line);
+            taskTable.add(line);
             i++;
         }
         taskTable.setPreferredSize(new Dimension(widthProductPanel, heightProductPanel * i));
         taskTable.revalidate();
         scrollPane.setViewportView(taskTable);
+    }
+
+    public void updateCompleteTask(int id) {
+        TaskLine line = linesMap.get(id);
+        if(line != null){
+            line.markAsAccepted();
+        }
     }
 }

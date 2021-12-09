@@ -9,4 +9,8 @@ public interface DBWindowListener {
     void requestFullTaskTable();
     void requestFullSalesTable();
     void requestFullGlobalChangesTable();
+
+    void requestAcceptTheChange(int id);
+
+    void requestCompleteTheTask(int id);
 }
