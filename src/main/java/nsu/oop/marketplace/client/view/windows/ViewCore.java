@@ -125,6 +125,37 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
         listener.requestCompleteTheTask(id);
     }
 
+    @Override
+    public void requestAddNewUser(String firstName, String secondName, String role, String login, String password) {
+        listener.requestAddNewUser(firstName, secondName, role, login, password);
+    }
+
+    @Override
+    public void requestAddNewProduct(String name, String price, String description) {
+        listener.requestAddNewProduct(name,price,description);
+    }
+
+    @Override
+    public void requestChangeProductInfo(int id, String name, String price, String description) {
+        listener.requestChangeProductInfo(id,  name, price, description);
+    }
+
+    @Override
+    public void requestProductList() {
+        listener.requestProductList();
+    }
+
+    @Override
+    public void requestUserList() {
+        listener.requestUserList();
+    }
+
+    @Override
+    public void requestSetTask(int id, String task) {
+        listener.requestSetTask(id, task);
+    }
+
+
     //Chat
     @Override
     public void launchChat() {
@@ -136,8 +167,7 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
         chatWindow.updateChatField(chatName, senderName, message);
     }
 
-    @Override
-    public void updateUserList(List<String> list) {
+    public void updateChatUserList(List<String> list) {
         chatWindow.updateUserList(list);
     }
 
@@ -174,6 +204,26 @@ public class ViewCore implements View, DBWindowListener, ChatWindowListener, Aut
     @Override
     public void updateAcceptChange(MarketplaceProto.Message.DBResponse.AcceptChange acceptChange) {
         dbWindow.updateAcceptChange(acceptChange);
+    }
+
+    @Override
+    public void updateDBUserList(List<MarketplaceProto.DBUser> userList) {
+        dbWindow.updateUserList(userList);
+    }
+
+    @Override
+    public void updateDBProductList(List<MarketplaceProto.DBProduct> productList) {
+        dbWindow.updateProductList(productList);
+    }
+
+    @Override
+    public void showSuccessDBAction() {
+        dbWindow.showSuccessDBAction();
+    }
+
+    @Override
+    public void showFailedDBAction() {
+        dbWindow.showFailedDBAction();
     }
 
     @Override

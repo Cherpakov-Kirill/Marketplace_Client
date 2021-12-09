@@ -13,4 +13,11 @@ public interface ViewCoreListener {
 
     void requestAcceptTheChange(int id);
     void requestCompleteTheTask(int id);
+    void requestAddNewUser(String firstName, String secondName, String role, String login, String password);
+    void requestSetTask(int id, String task);
+    void requestAddNewProduct(String name, String price, String description);
+    void requestChangeProductInfo(int id, String name, String price, String description);
+
+    void requestUserList();
+    void requestProductList();
 }

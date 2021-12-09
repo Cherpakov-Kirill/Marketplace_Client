@@ -1,16 +1,25 @@
 package nsu.oop.marketplace.client.view.windows.db;
 
+import nsu.oop.marketplace.client.view.panels.db.main.addProduct.AddNewProductListener;
+import nsu.oop.marketplace.client.view.panels.db.main.addProduct.AddNewProductPanel;
+import nsu.oop.marketplace.client.view.panels.db.main.addUser.AddNewUserListener;
+import nsu.oop.marketplace.client.view.panels.db.main.addUser.AddNewUserPanel;
+import nsu.oop.marketplace.client.view.panels.db.main.changeProduct.ChangeProductListener;
+import nsu.oop.marketplace.client.view.panels.db.main.changeProduct.ChangeProductPanel;
 import nsu.oop.marketplace.client.view.panels.db.main.globalChanges.GlobalChangeLineListener;
 import nsu.oop.marketplace.client.view.panels.db.main.globalChanges.GlobalChangeTablePanel;
 import nsu.oop.marketplace.client.view.panels.db.main.logs.LogTablePanel;
 import nsu.oop.marketplace.client.view.panels.db.main.product.ProductTablePanel;
 import nsu.oop.marketplace.client.view.panels.db.main.StartUpPanel;
+import nsu.oop.marketplace.client.view.panels.db.main.response.ServerResponseListener;
+import nsu.oop.marketplace.client.view.panels.db.main.response.SuccessfullyPanel;
+import nsu.oop.marketplace.client.view.panels.db.main.response.UnsuccessfullyPanel;
 import nsu.oop.marketplace.client.view.panels.db.main.sales.SalesTablePanel;
+import nsu.oop.marketplace.client.view.panels.db.main.setTask.SetTaskListener;
+import nsu.oop.marketplace.client.view.panels.db.main.setTask.SetTaskPanel;
 import nsu.oop.marketplace.client.view.panels.db.main.tasks.TaskLineListener;
 import nsu.oop.marketplace.client.view.panels.db.main.tasks.TaskTablePanel;
-import nsu.oop.marketplace.client.view.panels.db.menu.ClientMenuListener;
-import nsu.oop.marketplace.client.view.panels.db.menu.ClientMenuPanel;
-import nsu.oop.marketplace.client.view.panels.db.menu.DirectorMenuPanel;
+import nsu.oop.marketplace.client.view.panels.db.menu.*;
 import nsu.oop.marketplace.inet.MarketplaceProto;
 
 import javax.swing.*;
@@ -22,8 +31,9 @@ import java.util.List;
 
 import static nsu.oop.marketplace.client.view.ViewUtils.getPart;
 
-public class DBWindow extends JFrame implements ClientMenuListener, TaskLineListener, GlobalChangeLineListener {
+public class DBWindow extends JFrame implements ClientMenuListener, ServerResponseListener, TaskLineListener, GlobalChangeLineListener, AddNewUserListener, AddNewProductListener, SetTaskListener, ChangeProductListener {
     private static final String NAME = "Marketplace Client";
+
     private static final String MENU = "Menu";
     private static final String CLOSE = "Close";
     private static final String LOGOUT = "LogOut";
@@ -40,6 +50,8 @@ public class DBWindow extends JFrame implements ClientMenuListener, TaskLineList
 
     private DBClientPanelType openedPanel;
 
+    private final SuccessfullyPanel successfullyPanel;
+    private final UnsuccessfullyPanel unsuccessfullyPanel;
     private final StartUpPanel startUpPanel;
     private ClientMenuPanel clientMenuPanel;
     private ProductTablePanel productTablePanel;
@@ -47,6 +59,10 @@ public class DBWindow extends JFrame implements ClientMenuListener, TaskLineList
     private TaskTablePanel taskTablePanel;
     private SalesTablePanel salesTablePanel;
     private GlobalChangeTablePanel globalChangeTablePanel;
+    private AddNewUserPanel addNewUserPanel;
+    private AddNewProductPanel addNewProductPanel;
+    private SetTaskPanel setTaskPanel;
+    private ChangeProductPanel changeProductPanel;
 
     private JMenuItem createMenuItem(String name, ActionListener listener) {
         JMenuItem item = new JMenuItem(name);
@@ -77,15 +93,9 @@ public class DBWindow extends JFrame implements ClientMenuListener, TaskLineList
         this.setSize(widthClientWindow, heightClientWindow);
         setupMenu();
         switch (type) {
-            case DIRECTOR -> {
-                this.clientMenuPanel = new DirectorMenuPanel(this, fullName, widthMenu, heightMenu);
-            }
-            /*case MANAGER -> {
-
-            }
-            case ADMINISTRATOR -> {
-
-            }*/
+            case DIRECTOR -> this.clientMenuPanel = new DirectorMenuPanel(this, fullName, widthMenu, heightMenu);
+            case MANAGER -> this.clientMenuPanel = new ManagerMenuPanel(this, fullName, widthMenu, heightMenu);
+            case ADMINISTRATOR -> this.clientMenuPanel = new AdminMenuPanel(this, fullName, widthMenu, heightMenu);
         }
         this.startUpPanel = new StartUpPanel(widthMainPanel, heightMainPanel, widthMenu, 0);
 
@@ -100,10 +110,12 @@ public class DBWindow extends JFrame implements ClientMenuListener, TaskLineList
         });
         this.setResizable(false);
         this.setVisible(true);
+        this.successfullyPanel = new SuccessfullyPanel(this, widthMainPanel, heightMainPanel, widthMenu, 0);
+        this.unsuccessfullyPanel = new UnsuccessfullyPanel(this, widthMainPanel, heightMainPanel, widthMenu, 0);
     }
 
     private JPanel getContentPanel(ClientMenuPanel menu, JPanel main) {
-        openedPanel = DBClientPanelType.valueOf(main.getClass().getSimpleName());
+        //openedPanel = DBClientPanelType.valueOf(main.getClass().getSimpleName());
         JPanel panel = new JPanel();
         panel.setLayout(null);
         panel.add(menu);
@@ -127,9 +139,101 @@ public class DBWindow extends JFrame implements ClientMenuListener, TaskLineList
         listener.logOut();
     }
 
+    @Override
+    public void backToStart() {
+        openedPanel = DBClientPanelType.valueOf(StartUpPanel.class.getSimpleName());
+        setContentOnFrame(getContentPanel(clientMenuPanel, startUpPanel));
+    }
+
+    public void showSuccessDBAction() {
+        openedPanel = DBClientPanelType.valueOf(SuccessfullyPanel.class.getSimpleName());
+        setContentOnFrame(getContentPanel(clientMenuPanel, successfullyPanel));
+    }
+
+    public void showFailedDBAction() {
+        openedPanel = DBClientPanelType.valueOf(UnsuccessfullyPanel.class.getSimpleName());
+        setContentOnFrame(getContentPanel(clientMenuPanel, unsuccessfullyPanel));
+    }
+
+    public void updateUserList(List<MarketplaceProto.DBUser> userList) {
+        switch (openedPanel) {
+            case SetTaskPanel -> {
+                setTaskPanel.updateUserList(userList);
+                setContentOnFrame(getContentPanel(clientMenuPanel, setTaskPanel));
+            }
+            default -> System.err.println("Now opened other panel, not for userList");
+        }
+    }
+
+    public void updateProductList(List<MarketplaceProto.DBProduct> productList) {
+        switch (openedPanel) {
+            case ChangeProductPanel -> {
+                changeProductPanel.updateProductList(productList);
+                setContentOnFrame(getContentPanel(clientMenuPanel, changeProductPanel));
+            }
+            default -> System.err.println("Now opened other panel, not for productList");
+        }
+    }
+
+
+    /// Add new user
+    @Override
+    public void showAddNewUser() {
+        openedPanel = DBClientPanelType.valueOf(AddNewUserPanel.class.getSimpleName());
+        addNewUserPanel = new AddNewUserPanel(this, widthMainPanel, heightMainPanel, widthMenu, 0);
+        setContentOnFrame(getContentPanel(clientMenuPanel, addNewUserPanel));
+    }
+
+    @Override
+    public void addNewUser(String firstName, String secondName, String role, String login, String password) {
+        listener.requestAddNewUser(firstName, secondName, role, login, password);
+    }
+
+    /// Add new product
+    @Override
+    public void showAddNewProduct() {
+        openedPanel = DBClientPanelType.valueOf(AddNewProductPanel.class.getSimpleName());
+        addNewProductPanel = new AddNewProductPanel(this, widthMainPanel, heightMainPanel, widthMenu, 0);
+        setContentOnFrame(getContentPanel(clientMenuPanel, addNewProductPanel));
+    }
+
+    @Override
+    public void addNewProduct(String name, String price, String description) {
+        listener.requestAddNewProduct(name, price, description);
+    }
+
+
+    /// Change product info
+    @Override
+    public void showChangeProductInfo() {
+        openedPanel = DBClientPanelType.valueOf(ChangeProductPanel.class.getSimpleName());
+        changeProductPanel = new ChangeProductPanel(this, widthMainPanel, heightMainPanel, widthMenu, 0);
+        listener.requestProductList();
+    }
+
+
+    @Override
+    public void changeProductInfo(int id, String name, String price, String description) {
+        listener.requestChangeProductInfo(id, name, price, description);
+    }
+
+    /// Set new task
+    @Override
+    public void showSetTask() {
+        openedPanel = DBClientPanelType.valueOf(SetTaskPanel.class.getSimpleName());
+        setTaskPanel = new SetTaskPanel(this, widthMainPanel, heightMainPanel, widthMenu, 0);
+        listener.requestUserList();
+    }
+
+    @Override
+    public void setTask(int id, String task) {
+        listener.requestSetTask(id, task);
+    }
+
     /// Logs
     @Override
     public void showLogs() {
+        openedPanel = DBClientPanelType.valueOf(LogTablePanel.class.getSimpleName());
         logTablePanel = new LogTablePanel(widthMainPanel, heightMainPanel, widthMenu, 0);
         listener.requestFullLogTable();
     }
@@ -142,6 +246,7 @@ public class DBWindow extends JFrame implements ClientMenuListener, TaskLineList
     /// Global changes
     @Override
     public void showGlobalChanges() {
+        openedPanel = DBClientPanelType.valueOf(GlobalChangeTablePanel.class.getSimpleName());
         globalChangeTablePanel = new GlobalChangeTablePanel(this, widthMainPanel, heightMainPanel, widthMenu, 0);
         listener.requestFullGlobalChangesTable();
     }
@@ -152,20 +257,20 @@ public class DBWindow extends JFrame implements ClientMenuListener, TaskLineList
     }
 
     public void updateAcceptChange(MarketplaceProto.Message.DBResponse.AcceptChange acceptChange) {
-        if(acceptChange.getSuccess()){
+        if (acceptChange.getSuccess()) {
             globalChangeTablePanel.updateAcceptChange(acceptChange.getId());
         }
     }
 
     @Override
     public void acceptTheChange(int id) {
-        System.out.println("Accept " + id);
         listener.requestAcceptTheChange(id);
     }
 
     /// Sales table
     @Override
     public void showSales() {
+        openedPanel = DBClientPanelType.valueOf(SalesTablePanel.class.getSimpleName());
         salesTablePanel = new SalesTablePanel(widthMainPanel, heightMainPanel, widthMenu, 0);
         listener.requestFullSalesTable();
     }
@@ -178,6 +283,7 @@ public class DBWindow extends JFrame implements ClientMenuListener, TaskLineList
     /// Task table
     @Override
     public void showTasks() {
+        openedPanel = DBClientPanelType.valueOf(TaskTablePanel.class.getSimpleName());
         taskTablePanel = new TaskTablePanel(this, widthMainPanel, heightMainPanel, widthMenu, 0);
         listener.requestFullTaskTable();
     }
@@ -188,20 +294,20 @@ public class DBWindow extends JFrame implements ClientMenuListener, TaskLineList
     }
 
     public void updateCompleteTask(MarketplaceProto.Message.DBResponse.CompleteTask completeTask) {
-        if(completeTask.getSuccess()){
+        if (completeTask.getSuccess()) {
             taskTablePanel.updateCompleteTask(completeTask.getId());
         }
     }
 
     @Override
     public void completeTheTask(int id) {
-        System.out.println("Complete " + id);
         listener.requestCompleteTheTask(id);
     }
 
     /// Product table
     @Override
     public void showProductTable() {
+        openedPanel = DBClientPanelType.valueOf(ProductTablePanel.class.getSimpleName());
         productTablePanel = new ProductTablePanel(widthMainPanel, heightMainPanel, widthMenu, 0);
         listener.requestFullProductTable();
     }

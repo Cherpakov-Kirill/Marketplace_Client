@@ -11,6 +11,12 @@ public interface DBWindowListener {
     void requestFullGlobalChangesTable();
 
     void requestAcceptTheChange(int id);
-
     void requestCompleteTheTask(int id);
+
+    void requestAddNewUser(String firstName, String secondName, String role, String login, String password);
+    void requestUserList();
+    void requestSetTask(int id, String task);
+    void requestAddNewProduct(String name, String price, String description);
+    void requestChangeProductInfo(int id, String name, String price, String description);
+    void requestProductList();
 }

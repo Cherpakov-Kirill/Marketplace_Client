@@ -64,7 +64,7 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
         switch (chatMessage.getTypeCase()) {
             case PUBLIC -> view.updateChatField("Group Chat", chatMessage.getPublic().getSenderName(), chatMessage.getPublic().getMessage());
             case PRIVATE -> view.updateChatField(chatMessage.getPrivate().getSenderName(), chatMessage.getPrivate().getSenderName(), chatMessage.getPrivate().getMessage());
-            case LIST -> view.updateUserList(chatMessage.getList().getUserList().getNameList());
+            case LIST -> view.updateChatUserList(chatMessage.getList().getUserList().getNameList());
             default -> users.sendChatMessage(MessageBuilder.chatErrorMsgBuilder("Server can not send " + chatMessage.getTypeCase() + " message!"), id);
         }
     }
@@ -79,6 +79,10 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
             case CHANGE_TABLE -> view.updateGlobalChangesTable(dbResponse.getChangeTable().getFullChangeList());
             case COMPLETE_TASK -> view.updateCompleteTask(dbResponse.getCompleteTask());
             case ACCEPT_CHANGE -> view.updateAcceptChange(dbResponse.getAcceptChange());
+            case USER_LIST -> view.updateDBUserList(dbResponse.getUserList().getUserList());
+            case PRODUCT_LIST -> view.updateDBProductList(dbResponse.getProductList().getProductList());
+            case SUCCESSFULLY -> view.showSuccessDBAction();
+            case UNSUCCESSFULLY -> view.showFailedDBAction();
         }
     }
 
@@ -149,6 +153,37 @@ public class ClientCore implements InetControllerListener, UsersControllerListen
     public void requestCompleteTheTask(int id) {
         users.sendDBRequestMessage(MessageBuilder.dbCompleteTaskRequestMsgBuilder(id), 0);
     }
+
+    @Override
+    public void requestAddNewUser(String firstName, String secondName, String role, String login, String password) {
+        users.sendDBRequestMessage(MessageBuilder.dbAddNewUserRequestMsgBuilder(firstName, secondName, role, login, password), 0);
+    }
+
+    @Override
+    public void requestAddNewProduct(String name, String price, String description) {
+        users.sendDBRequestMessage(MessageBuilder.dbAddNewProductRequestMsgBuilder(name, price, description), 0);
+    }
+
+    @Override
+    public void requestChangeProductInfo(int id, String name, String price, String description) {
+        users.sendDBRequestMessage(MessageBuilder.dbChangeProductInfoRequestMsgBuilder(id, name, price, description), 0);
+    }
+
+    @Override
+    public void requestProductList() {
+        users.sendDBRequestMessage(MessageBuilder.dbProductListRequestMsgBuilder(), 0);
+    }
+
+    @Override
+    public void requestUserList() {
+        users.sendDBRequestMessage(MessageBuilder.dbUserListRequestMsgBuilder(), 0);
+    }
+
+    @Override
+    public void requestSetTask(int id, String task) {
+        users.sendDBRequestMessage(MessageBuilder.dbSetTaskRequestMsgBuilder(id, task), 0);
+    }
+
 
     //not used methods
     @Override

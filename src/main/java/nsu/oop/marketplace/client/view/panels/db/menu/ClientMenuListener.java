@@ -7,4 +7,8 @@ public interface ClientMenuListener {
     void showTasks();
     void showSales();
     void showGlobalChanges();
+    void showAddNewUser();
+    void showSetTask();
+    void showAddNewProduct();
+    void showChangeProductInfo();
 }

@@ -11,7 +11,7 @@ public interface View {
     void closeView(String closeInfo);
 
     void updateChatField(String chatName, String senderName, String message);
-    void updateUserList(List<String> list);
+    void updateChatUserList(List<String> list);
 
     void updateProductTable(List<MarketplaceProto.DBFullProduct> products);
     void updateLogTable(List<MarketplaceProto.DBFullLog> logs);
@@ -20,6 +20,11 @@ public interface View {
     void updateGlobalChangesTable(List<MarketplaceProto.DBFullChanges> fullChangeList);
 
     void updateCompleteTask(MarketplaceProto.Message.DBResponse.CompleteTask completeTask);
-
     void updateAcceptChange(MarketplaceProto.Message.DBResponse.AcceptChange acceptChange);
+
+    void updateDBUserList(List<MarketplaceProto.DBUser> userList);
+    void updateDBProductList(List<MarketplaceProto.DBProduct> productList);
+
+    void showSuccessDBAction();
+    void showFailedDBAction();
 }

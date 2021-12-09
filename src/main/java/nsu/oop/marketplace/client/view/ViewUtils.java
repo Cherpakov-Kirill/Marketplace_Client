@@ -5,12 +5,14 @@ import nsu.oop.marketplace.client.view.windows.db.DBWindow;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
 public class ViewUtils {
-    public static int getPart(int param, double part){
-        return (int)(((double)param)*part);
+    public static int getPart(int param, double part) {
+        return (int) (((double) param) * part);
     }
 
     public static JButton initButton(int width, int height, int posX, int posY, ActionListener listener) {
@@ -54,6 +56,19 @@ public class ViewUtils {
         return label;
     }
 
+    public static JTextField initTextField(int fontSize) {
+        JTextField field = new JTextField();
+        field.setFont(new Font("Roboto", Font.BOLD, fontSize));
+        field.setBackground(new Color(112, 160, 190));
+        return field;
+    }
+
+    public static JScrollPane initScrollPane(JComponent component, int width, int height, int posX, int posY) {
+        JScrollPane sp = initScrollPane(width, height, posX, posY);
+        sp.setViewportView(component);
+        return sp;
+    }
+
     public static JScrollPane initScrollPane(int width, int height, int posX, int posY) {
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.getViewport().setOpaque(false);
@@ -66,7 +81,7 @@ public class ViewUtils {
         return scrollPane;
     }
 
-    public static JTextField initTextField(String defaultText, Color color, int fontSize, int columns, int width, int height, int posX, int posY){
+    public static JTextField initTextField(String defaultText, Color color, int fontSize, int columns, int width, int height, int posX, int posY) {
         JTextField textField = new JTextField(defaultText, columns);
         textField.setFont(new Font("Roboto", Font.BOLD, fontSize));
         textField.setForeground(color);
