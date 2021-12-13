@@ -5,8 +5,6 @@ import nsu.oop.marketplace.client.view.windows.db.DBWindow;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
@@ -20,7 +18,7 @@ public class ViewUtils {
         button.setPreferredSize(new Dimension(width, height));
         button.setFocusPainted(false);
         button.setContentAreaFilled(false);
-        button.setBorderPainted(true);///
+        button.setBorderPainted(false);///
         button.setOpaque(false);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.addActionListener(listener);
