@@ -23,8 +23,8 @@ public class Authentication extends JFrame {
         badAuth = new JLabel("Wrong login or password");
         badAuth.setForeground(Color.RED);
 
-        nameField = new JTextField("Dashka");
-        passField = new JPasswordField("meleshenko");
+        nameField = new JTextField();
+        passField = new JPasswordField();
         JButton button = new JButton("LogIn");
         button.addActionListener(e -> {
             remove(badAuth);
